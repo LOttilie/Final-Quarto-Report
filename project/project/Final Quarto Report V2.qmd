@@ -1,0 +1,68 @@
+---
+title: "Warning alert about about the lack of care and food"
+subtitle: "A concern about UNICEF datas"
+author: "Ottilie Lamamy"
+date: "04/27/2023"
+format: html
+---
+
+***The graphs displayed below are intended to sound the alarm on four points that our analysis of Unicef data has highlighted:***
+
+- The World Map chart shows us the 15 countries where the proportion of health care facilities with no health care waste management service is the highest in 2021
+
+- The Bar chart shows us the 15 countries with the highest inflation in 2021
+
+- The scatterplot with a linear regression line shows us the 15 countries where children under 5 are the most malnourished in relation to GDP/capita, all in 2021
+
+- The Time-series chart shows us the 15 countries with the lowest life expectancy in 2021
+
+**We can in fact see that the 5 countries most in difficulty are established on the African continent:**
+
+1. Congo
+2. Niger
+3. Togo
+4. Namibia
+5. Zimbabwe
+
+```{r}
+library(readr)
+unicef_metadata <- read_csv("unicef_metadata.csv")
+unicef_indicator_1_graph_1_ <- read_csv("unicef_indicator_1_graph_1_.csv")
+
+install.packages("gapminder")
+library(gapminder)
+data("gapminder")
+head(gapminder)
+
+install.packages("tidyverse")
+library(tidyverse)
+
+ggplot(data = gapminder) +
+  aes(x = gdpPercap, y = lifeExp, color = continent) +
+  geom_point()
+
+ggplot(data = gapminder) +
+  aes(x = year, y = lifeExp, color = country) +
+  geom_line() +
+  guides(color ="none")
+
+select(gapminder, country, life_expectancy = lifeExp, gdp_per_capita = gdpPercap)
+new_data <- select(gapminder, -pop, -year)
+new_data
+
+gapminder_avg_continent_2007 <- gapminder %>% 
+  filter(year == 2007) %>% 
+  group_by(continent) %>% 
+  summarise(m_lifeExp = mean(lifeExp))
+ggplot(data = gapminder_avg_continent_2007) +
+  aes(x = continent, y = m_lifeExp, fill = continent) +
+  geom_col()
+
+pop_2007 <- gapminder %>% 
+  filter(year == 2007)
+map_world <- map_data("world") 
+map_pop_2007 <- full_join(map_world, pop_2007, by = c("region" = "country"))
+ggplot(data = map_pop_2007) +
+  aes(x = long, y = lat, group = group, fill = pop) +
+  geom_polygon()
+```

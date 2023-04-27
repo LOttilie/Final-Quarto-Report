@@ -1,0 +1,31 @@
+---
+title: "Warning alert about about the lack of care and food"
+subtitle: "A concern about UNICEF datas"
+author: "Ottilie Lamamy"
+date: "04/27/2023"
+format: html
+---
+
+```{r}
+install.packages("tidyverse")
+install.packages("maps")
+install.packages("gapminder")
+library(tidyverse)
+library(maps)
+library(gapminder)
+
+# Charger le fichier CSV
+data <- read_csv("unicef_indicator_1.csv")
+
+# Charger la carte du monde
+world_map <- map_data("world")
+
+# Fusionner les données avec la carte du monde
+merged_data <- full_join(world_map, data, by = c("region" = "country"))
+
+# Créer la carte avec les données fusionnées
+ggplot() +
+  geom_polygon(data = merged_data, aes(x = long, y = lat, group = group, fill = variable)) +
+  theme_void() +
+  coord_equal()
+```

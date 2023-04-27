@@ -1,0 +1,13 @@
+---
+title: "Untitled"
+format: html
+
+execute:
+  echo: false
+  warning: false
+  message: false
+---
+
+
+
+# I love R 
